@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<HTML
+        xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>注
+        册</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script>
+        var fl = true;
+
+        function findUser(name) {
+            $.post("vername", {"username": name}, function (flag) {
+                if (flag) {
+                    alert('用户名被占用');
+                    fl = false;
+                } else {
+                    fl = true;
+                }
+            });
+        }
+
+        function check() {
+            var username = document.getElementById('userName').value;
+            var password = document.getElementById('password').value;
+            var repass = document.getElementById('repass').value;
+            if (username == '') {
+                alert('用户名不能为空');
+                return false;
+            }
+            if (password == '') {
+                alert('密码不能为空');
+                return false;
+            }
+            if (password != repass) {
+                alert('重复密码必须一致');
+                return false;
+            }
+            //用户是否存在
+            if (!fl) {
+                alert('用户名被占用');
+                return fl;
+            }
+            return true;
+        }
+    </script>
+
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="search">
+        <!--
+            <form method="get" action="index.html">
+                <input type="text" name="keywords" class="input-text" /><input type="submit" name="submit" class="input-button" value="" />
+            </form>
+        -->
+    </DIV>
+</DIV>
+<DIV class="box" id="register">
+    <H2>新用户注册</H2>
+    <DIV class="content">
+        <FORM onsubmit="return check()" action="User-register" method="post">
+            <DL>
+                <DT>用户名：</DT>
+                <DD><INPUT name="username" class="input-text" id="userName" onblur="findUser(this.value)" type="text"/>
+                </DD>
+                <DT>密码：</DT>
+                <DD><INPUT name="password" class="input-text" id="password" type="password"/></DD>
+                <DT>确认密码：</DT>
+                <DD><INPUT name="confirmPassword" class="input-text" id="repass" type="password"/></DD>
+                <DT></DT>
+                <DD><INPUT name="submit" class="input-button" type="submit" value=""/></DD>
+            </DL>
+        </FORM>
+        <DIV class="error"></DIV>
+        <DIV class="error"></DIV>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="footer">北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>

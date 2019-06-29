@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<HTML
+        xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>投票列表</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script>
+        function del(obj) {
+            var sid = obj.nextElementSibling.value;
+            if (confirm('确定要删除？')) {
+                $.post("delbysid", {"sid": sid}, function (flag) {
+                    if (flag == 1) {
+                        alert('删除成功！');
+                    }
+                });
+                obj.parentElement.parentElement.parentElement.remove();
+                //location.href = 'delbysid?sid='+sid;
+            }
+        }
+    </script>
+
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.user.username}">游客..</span>
+        <SPAN class="return"><A href="firstpage">返回列表</A></SPAN>
+        <SPAN class="addnew"><A href="addVote">添加新投票</A></SPAN>
+        <SPAN class="modify"><A href="maintain">维护</A></SPAN>
+        <SPAN class="return"><A href="logoff">注销</A></SPAN></DIV>
+    <DIV class="search">
+        <FORM th:action="${map.flag==0}?firstpage:maintain" method="post">
+            <INPUT name="dimtitle" class="input-text" type="text" th:value="${map.title}">
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="vote">
+    <H2>投票列表</H2>
+    <DIV style="float: right;">
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex=1':maintain+'?pageIndex=1'">首页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPageNum()-1}:maintain+'?pageIndex='+${maplist.getPageNum()-1}">上一页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPageNum()+1}:maintain+'?pageIndex='+${maplist.getPageNum()+1}">下一页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPages()}:maintain+'?pageIndex='+${maplist.getPages()}">末页</A>
+    </DIV>
+    <BR>
+    <UL class="list">
+        <LI th:each="list,lstat:${maplist}" th:class="${lstat.odd}?odd">
+            <H4><!--<span th:text="${map.flag}">2323</span>-->
+                <em th:hidden="${map.flag==0}?hidden">
+                    <a th:href="'maintain/ssc/xnkc/'+${list.sid}+'/6'">维护</a>
+                    <a id="del" onclick="del(this)" style="color: #0066CC;cursor: pointer;">删除</a>
+                    <input hidden="hidden" th:value="${list.sid}">
+                </em>
+                <A th:href="@{'showvote/59032413apcpkpa$$@$$/{iid=99999, oid=4, title=1, sid=8}/ckak/'+${list.iid}+'/'+${list.oid}+'/'+${list.title}+'/'+${list.sid}+'/pal/6'}"
+                   th:text="${list.title}">这是投票列表项</A>
+            </H4>
+            <DIV class="join">
+                <em th:hidden="${map.flag==1}?hidden">
+                    <a th:href="'goPoll/ssc/xnkc/'+${list.iid}+'/'+${list.sid}+'/6'">我要参与</a>
+                </em>
+            </DIV>
+            <P class="info">共有 <span th:text="${list.oid}">0</span> 个选项，
+                已有 <span th:text="${list.iid}">0</span> 个投票。</P>
+        </LI>
+    </UL>
+    <DIV style="float: right;">
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex=1':maintain+'?pageIndex=1'">首页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPageNum()-1}:maintain+'?pageIndex='+${maplist.getPageNum()-1}">上一页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPageNum()+1}:maintain+'?pageIndex='+${maplist.getPageNum()+1}">下一页</A>
+        |
+        <A th:href="${map.flag==0}?firstpage+'?pageIndex='+${maplist.getPages()}:maintain+'?pageIndex='+${maplist.getPages()}">末页</A>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+
+</BODY>
+
+</HTML>

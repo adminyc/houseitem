@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace映射dao接口的全路径 -->
+<mapper namespace="cn.bdqn.dao.UserDao">
+    <!-- 用户登录 -->
+    <select id="verifyUsers" resultType="users">
+        SELECT * FROM users WHERE username=#{username} AND PASSWORD=#{password}
+    </select>
+    <!-- 新增用户 -->
+    <insert id="insertUsers">
+        insert into users(username,password) values(#{username},#{password})
+    </insert>
+    <!-- 注册时判断该用户是否存在 -->
+    <select id="vername" resultType="int">
+        select count(*) from users where username =#{username}
+    </select>
+</mapper>

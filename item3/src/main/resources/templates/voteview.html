@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<HTML xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE></TITLE>
+    <LINK href="/vote/css/style.css" rel="stylesheet" type="text/css">
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="/vote/images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.user.username}">游客..</span>
+        <SPAN class="return">
+            <A href="/vote/firstpage">返回列表</A>
+        </SPAN>
+        <SPAN class="addnew">
+            <A href="/vote/addVote">添加新投票</A>
+        </SPAN>
+        <SPAN class="modify">
+            <A href="/vote/maintain">维护</A>
+        </SPAN>
+        <SPAN class="return">
+            <A href="/vote/logoff">注销</A>
+        </SPAN>
+    </DIV>
+    <DIV class="search">
+        <FORM action="Subject-search.action" method="post"><INPUT name="keywords" class="input-text" type="text"><INPUT
+                name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="vote">
+    <H2>查看投票</H2>
+    <UL class="list">
+        <LI>
+            <H4 th:text="${map.title}">投票项标题</H4>
+            <P class="info">共有 <span th:text="${map.oid}">0</span> 个选项，已有 <span th:text="${map.iid}">0</span> 个投票。</P>
+            <OL>
+                <LI th:each="l,lstat:${list}">
+                    <span th:text="${l.content}">空.</span>
+                    <DIV class="rate">
+                        <DIV class="ratebg"><!--<span th:text="${l.percent}">0</span>-->
+                            <DIV class="percent" th:style="@{'width:'+${l.iid}/${map.totalCount}*100}+'%'"></DIV>
+                        </DIV>
+                        <P><span th:text="${l.iid}">无</span>票
+                            <!--  (<SPAN th:text="${map.totalCount}==0?0.0:${l.iid}/${map.totalCount}*100">0.00</SPAN>%)-->
+                            (<SPAN th:text="${l.percent}">0.00</SPAN>%)
+                        </P>
+                    </DIV>
+                </LI>
+
+            </OL>
+            <DIV class="goback"><A href="/vote/firstpage">返回投票列表</A></DIV>
+        </LI>
+    </UL>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>

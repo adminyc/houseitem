@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<HTML
+        xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000" http-equiv="X-UA-Compatible">
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>参与投票</TITLE>
+    <LINK th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG th:src="@{/images/logo.gif}"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.user.username}">游客..</span>
+        <SPAN class="return">
+            <A href="/vote/firstpage">返回列表</A>
+        </SPAN>
+        <SPAN class="addnew">
+            <A href="/vote/addVote">添加新投票</A>
+        </SPAN>
+        <SPAN class="modify">
+            <A href="/vote/maintain">维护</A>
+        </SPAN>
+        <SPAN class="return">
+            <A href="/vote/logoff">注销</A>
+        </SPAN></DIV>
+    <DIV class="search">
+        <FORM action="Subject-search.action" method="post"><INPUT name="keywords" class="input-text" type="text"><INPUT
+                name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="vote">
+    <H2>参与投票</H2>
+    <UL class="list">
+        <LI>
+            <H4 th:text="${list[0].title}">这是你的投票标题</H4><span style="color: red;" th:text="${error}"></span>
+            <P class="info">共有 <span th:text="${list.size()}">0</span> 个选项，已有 <span th:text="${list[0].iid}">0</span>
+                个投票。</P>
+            <FORM action="/vote/voteSave" method="post"><INPUT name="entityId" type="hidden" value="1">
+                <INPUT name="title" type="hidden" th:value="${list[0].title}">
+                <INPUT name="iid" type="hidden" th:value="${list[0].iid}">
+                <INPUT name="size" type="hidden" th:value="${list.size()}">
+                <INPUT name="sid" type="hidden" th:value="${list[0].sid}">
+                <OL>
+                    <LI th:each="map,mstat:${list}"><!--<div th:text="${map.type}">aaa</div>-->
+                        <INPUT name="options" th:type="${map.type=='1'}?'radio':'checkbox'" th:text="${map.content}"
+                               th:value="${map.oid}">
+                        <!--<input name="oid" th:value="${map.oid}">-->
+                    </LI>
+                </OL>
+                <P class="voteView">
+                    <!--投票-->
+                    <INPUT type="image" src="/vote/images/button_vote.gif"/>
+                    <!--查看-->
+                    <A th:href="@{'/showvote/59032413apcpkpa$$@$$/{iid=99999, oid=4, title=1, sid=8}/ckak/'+${list[0].iid}+'/'+${list.size()}+'/'+${list[0].title}+'/'+${list[0].sid}+'/pal/6'}">
+                        <IMG th:src="@{/images/button_view.gif}"/>
+                    </A>
+                </P>
+            </FORM>
+        </LI>
+    </UL>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>

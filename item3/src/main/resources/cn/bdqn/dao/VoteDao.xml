@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace映射dao接口的全路径 -->
+<mapper namespace="cn.bdqn.dao.VoteDao">
+    <!-- 查询所有记录(分页) -->
+    <select id="selectAll" resultType="map">
+        SELECT s.sid,s.title,COUNT(DISTINCT o.oid) AS oid,COUNT(DISTINCT i.iid) AS iid
+        FROM `subject` s
+        LEFT JOIN `options` o ON s.sid=o.osid
+        LEFT JOIN `item` i ON s.sid=i.sid
+        <where>
+            <if test="title!=null and title!=''">
+                title like concat(concat('%',#{title}),'%')
+            </if>
+        </where>
+        GROUP BY s.sid,s.title
+        ORDER BY creattime DESC
+    </select>
+    <select id="findVoteBySid" resultType="map">
+        SELECT s.sid,s.title,content,o.oid,COUNT(DISTINCT i.iid) AS iid,`type`
+        FROM `subject` s
+        LEFT JOIN `options` o ON s.sid=o.osid
+        LEFT JOIN `item` i ON s.sid=i.sid
+        WHERE s.sid=#{sid}
+        GROUP BY o.oid
+    </select>
+    <select id="itemByNumber" resultType="map">
+        SELECT content,COUNT(iid) iid
+        FROM `options` o
+        LEFT JOIN item i ON o.oid = i.oid
+        WHERE osid = #{sid}
+        GROUP BY content
+    </select>
+    <select id="findItemTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM item
+        WHERE sid = #{sid}
+    </select>
+    <insert id="addVote">
+        INSERT INTO item (uid,sid,oid) VALUES (#{uid},#{sid},#{oid})
+    </insert>
+    <select id="verifyVote" resultType="int">
+        SELECT COUNT(*) FROM item
+        WHERE uid=#{uid} and sid=#{sid}
+    </select>
+    <insert id="insertsubject">
+        INSERT INTO `subject` (title,`type`) VALUES (#{title},#{type})
+    </insert>
+    <select id="selectBySid" resultType="int">
+        SELECT sid FROM `subject` WHERE title=#{title} AND `type` = #{type}
+    </select>
+    <insert id="insertoptions">
+        INSERT INTO `options` (content,osid) VALUES (#{content},#{osid})
+    </insert>
+    <update id="updateoptions">
+        UPDATE `options` SET `oid` = #{oid},`content` = #{content} , `osid` = #{osid} where `oid` = #{oid}
+    </update>
+    <update id="updatesubject">
+        UPDATE `subject` SET `type` = #{type} where sid = #{sid}
+    </update>
+    <delete id="deleteoptions">
+        DELETE FROM `options` WHERE `oid` = #{oid}
+    </delete>
+    <select id="selectmaintain" resultType="map">
+        SELECT sid,title,`type`,content,oid FROM `subject` s
+        INNER JOIN `options` o ON s.sid = o.osid
+        WHERE sid = #{sid}
+    </select>
+    <delete id="removesubject">
+        DELETE FROM `subject` WHERE sid=#{sid}
+    </delete>
+    <delete id="removeoptions">
+        DELETE FROM `options` WHERE osid=#{sid}
+    </delete>
+    <delete id="removeitem">
+        delete from `item` where sid=#{sid}
+    </delete>
+    <delete id="removeitembyoid">
+        delete from `item` where oid=#{oid}
+    </delete>
+</mapper>

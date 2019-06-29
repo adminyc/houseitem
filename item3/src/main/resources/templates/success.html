@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div id="header" class="wrap">
+    <img src="images/logo.gif"/>
+</div>
+<div id="navbar" class="wrap">
+    <div class="profile">
+        您好，<span th:text="${session.user.username}">游客..</span>
+        <span class="return"><a href="Subject-list.action">返回列表</a></span>
+        <span class="addnew"><a href="Subject-add.action">添加新投票</a></span>
+        <span class="modify"><a href="Subject-modify.action">维护</a></span>
+        <span class="return"><a href="User-exit.action">注销</a></span>
+    </div>
+    <div class="search">
+        <form method="post" action="Subject-search.action">
+            <input type="text" name="keywords" class="input-text" value=""/><input type="submit" name="submit"
+                                                                                   class="input-button" value=""/>
+        </form>
+    </div>
+</div>
+
+<div id="message" class="box">
+    <h2>提示信息</h2>
+    <div class="content">
+        <p>恭喜：投票成功！<br/><a
+                th:href="@{'showvote/59032413apcpkpa$$@$$/{iid=99999, oid=4, title=1, sid=8}/ckak/'+${list.iid}+'/'+${list.oid}+'/'+${list.title}+'/'+${list.sid}+'/pal/6'}">返回查看投票结果</a>
+        </p>
+    </div>
+</div>
+<div id="footer" class="wrap">
+    北大青鸟 &copy; 版权所有
+</div>
+</body>
+</html>

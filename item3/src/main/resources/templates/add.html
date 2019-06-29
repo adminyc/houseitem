@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<HTML
+        xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>发布新投票</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+    <SCRIPT src="js/jquery-1.8.0.min.js" type="text/javascript"></SCRIPT>
+
+    <SCRIPT type="text/javascript">
+        var isIE = !!document.all;
+
+        function AddOption() {
+            var voteoptions = document.getElementById("voteoptions");
+            var _p = document.createElement("p");
+            var _input = document.createElement("input");
+            _input.type = "text";
+            _input.className = "input-text";
+            _input.setAttribute("name", "options");
+            _p.appendChild(_input);
+            var _a = document.createElement("a");
+            _a.className = "del";
+            _a.setAttribute("href", "javascript:;");
+            if (isIE) {
+                _a.attachEvent("onclick", DelOption);
+            } else {
+                _a.addEventListener("click", DelOption, false);
+            }
+            _a.appendChild(document.createTextNode("删除"));
+            _p.appendChild(_a);
+            voteoptions.appendChild(_p);
+        }
+
+        //删除选项
+        function DelOption(e) {
+            if (!e) e = window.event;
+            var a = e.srcElement || e.target;
+            var obj = a.parentNode;
+            obj.parentNode.removeChild(obj);
+        }
+
+        //非空验证
+        function check() {
+            var title = document.getElementById('title').value;
+            var options = document.getElementsByName('options');
+            if (title == '') {
+                alert('投票内容不能为空');
+                return false;
+            }
+
+            //新增选项不能为空
+            for (var index in options) {
+                if (options[index].value == '') {
+                    alert('选项内容不能为空');
+                    return false;
+                }
+            }
+
+            //原来要修改的选项也不能为空
+            var flag = true;
+            $('#voteoptions :input').each(function () {
+                //alert(this.value);
+                if (this.value == '') {
+                    flag = false;
+                }
+            });
+            if (!flag) {
+                alert('选项内容不能为空');
+            }
+            return flag;
+        }
+    </SCRIPT>
+
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.user.username}">游客..</span>
+        <SPAN class="return">
+            <A href="/vote/firstpage">返回列表</A>
+        </SPAN>
+        <SPAN class="addnew">
+            <A href="/vote/addVote">添加新投票</A>
+        </SPAN>
+        <SPAN class="modify">
+            <A href="/vote/maintain">维护</A>
+        </SPAN>
+        <SPAN class="return">
+            <A href="/vote/logoff">注销</A>
+        </SPAN></DIV>
+    <DIV class="search">
+        <FORM action="Subject-search.action" method="post"><INPUT name="keywords" class="input-text" type="text"><INPUT
+                name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="box" id="voteManage">
+    <H2>添加新投票</H2>
+    <DIV class="content">
+        <FORM onsubmit="return check();" action="saveadd" method="post">
+            <DL>
+                <DT>投票内容：</DT>
+                <DD><!--<INPUT name="struts.token.name" type="hidden" value="token"> -->
+                    <!--<INPUT name="token" type="hidden" value="B1XPKLEQ7DQ6DNVWKBARPOY4HLYYXDE6">-->
+                    <INPUT name="title" class="input-text" id="title" type="text">
+                </DD>
+                <DT>投票类型：</DT>
+                <DD>
+                    <INPUT name="type" type="radio" value="1">单选
+                    <INPUT name="type" type="radio" value="2">多选
+                </DD>
+                <DT>投票选项：</DT>
+                <DD id="voteoptions">
+                    <P><INPUT name="options" class="input-text" type="text"></P>
+                    <P><INPUT name="options" class="input-text" type="text"></P></DD>
+                <DT></DT>
+                <DD class="button"><INPUT type="image" src="images/button_submit.gif">
+                    <A onclick="AddOption()" href="javascript:;">增加选项</A>
+                    <A href="/vote/firstpage">取消操作</A>
+                </DD>
+            </DL>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>
